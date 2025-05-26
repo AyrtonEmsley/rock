@@ -1,12 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="code.js"></script>
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Rock Paper Scissors</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+
+  <h1>Rock Paper Scissors</h1>
+
+  <div class="scoreboard">
+    Score → You: <span id="human-score">0</span> | Computer: <span id="computer-score">0</span>
+  </div>
+
+  <div class="buttons">
+    <button onclick="playRound('rock')">🪨 Rock</button>
+    <button onclick="playRound('paper')">📄 Paper</button>
+    <button onclick="playRound('scissors')">✂️ Scissors</button>
+  </div>
+
+  <div class="result" id="result"></div>
+  <div class="final-message" id="final-message"></div>
+
+  <script>
+    const choices = ["rock", "paper", "scissors"];
+    let humanScore = 0;
+    let computerScore = 0;
+    let roundsPlayed = 0;
+
+    function getComputerChoice() {
+      const randomIndex = Math.floor(Math.random() * choices.length);
+      return choices[randomIndex];
+    }
+
+    function playRound(humanChoice) {
+      if (roundsPlayed >= 5) {
+        document.getElementById("final-message").textContent = "Game over! Refresh to play again.";
+        return;
+      }
+
+      const computerChoice = getComputerChoice();
+      const resultDiv = document.getElementById("result");
+      const finalMessage = document.getElementById("final-message");
+
+      let roundResult = "";
+
+      if (humanChoice === computerChoice) {
+        roundResult = `It's a tie! Both chose ${humanChoice}.`;
+      } else {
+        const humanWins =
+          (humanChoice === "rock" && computerChoice === "scissors") ||
+          (humanChoice === "paper" && computerChoice === "rock") ||
+          (humanChoice === "scissors" && computerChoice === "paper");
+
+        if (humanWins) {
+          humanScore++;
+          roundResult = `You win! ${humanChoice} beats ${computerChoice}.`;
+        } else {
+          computerScore++;
+          roundResult = `You lose! ${computerChoice} beats ${humanChoice}.`;
+        }
+      }
+
+      roundsPlayed++;
+      document.getElementById("human-score").textContent = humanScore;
+      document.getElementById("computer-score").textContent = computerScore;
+      resultDiv.textContent = roundResult;
+
+      if (roundsPlayed === 5) {
+        if (humanScore > computerScore) {
+          finalMessage.textContent = "🎉 You win the game!";
+        } else if (computerScore > humanScore) {
+          finalMessage.textContent = "💻 Computer wins the game!";
+        } else {
+          finalMessage.textContent = "🤝 It's a tie game!";
+        }
+      }
+    }
+  </script>
+
 </body>
 </html>
+
